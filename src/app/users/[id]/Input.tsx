@@ -1,6 +1,28 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 export function Input({ id }: { id: string }) {
+  const [typing, setTyping] = useState(false);
+  const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(
+    null
+  );
+
+  function updatingStatus(typing: boolean) {
+    setTyping((previousStatus) => {
+      if (previousStatus !== typing) {
+        const formData = new FormData();
+        formData.append("userId", id);
+        formData.append("typing", typing.toString());
+        fetch("/api/chat", {
+          method: "PUT",
+          body: formData,
+        });
+      }
+      return typing;
+    });
+  }
+
   return (
     <div className="w-full">
       <form
@@ -21,12 +43,27 @@ export function Input({ id }: { id: string }) {
           }
         }}
       >
+        <div>{typing && <span>Typing</span>}</div>
         <input type="hidden" name="senderId" value={id} />
         <input
           name="content"
+          autoComplete="off"
           className="w-full h-4 block px-4 py-8 text-xl border text-black"
           type="text"
           placeholder="Type a message"
+          onKeyDown={() => {
+            updatingStatus(true);
+          }}
+          onKeyUp={() => {
+            if (typingTimeout) {
+              clearTimeout(typingTimeout);
+            }
+            setTypingTimeout(
+              setTimeout(() => {
+                updatingStatus(false);
+              }, 500)
+            );
+          }}
         />
       </form>
     </div>
