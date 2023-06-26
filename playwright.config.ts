@@ -7,4 +7,7 @@ export default defineConfig({
     command: "yarn run start",
     port: 3000,
   },
+  use: {
+    trace: "on",
+  },
 });

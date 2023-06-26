@@ -37,16 +37,14 @@ test.describe("Chat", () => {
     await page.goto("/users/1");
     await page.getByPlaceholder("Type a message").isVisible();
 
+    const typingIndicator = page.getByTestId("typing-indicator");
+
     await Promise.all([
-      async () => {
-        await secondPage
-          .getByPlaceholder("Type a message")
-          .type("Hello from user 2", { delay: 100 });
-      },
-      async () => {
-        const typingIndicator = page.getByTestId("typing-indicator");
-        await typingIndicator.isVisible();
-      },
+      secondPage
+        .getByPlaceholder("Type a message")
+        .type("Hello from user 2", { delay: 100 }),
+
+      typingIndicator.isVisible(),
     ]);
   });
 });
