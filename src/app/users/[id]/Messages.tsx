@@ -44,6 +44,7 @@ export function Messages({ id }: { id: string }) {
     >
       {messages.map((message, i) => {
         const isSelf = message.senderId === id;
+        const bgColorClass = isSelf ? "bg-blue-500" : "bg-gray-500";
         return (
           <div key={i} className="flex my-10 flex-col">
             <div
@@ -60,16 +61,20 @@ export function Messages({ id }: { id: string }) {
             </div>
 
             <div
-              className={`relative text-white p-5 rounded-lg shadow-md mt-4 ${
-                isSelf ? "bg-blue-500" : "bg-gray-500"
-              }`}
+              className={`relative flex ${
+                isSelf ? "justify-start" : "justify-end"
+              } align-top`}
             >
               <div
-                className={`absolute -top-2 inline-block h-4 w-4 transform rotate-45 ${
-                  isSelf ? "left-4 bg-blue-500 " : "right-4 bg-gray-500"
+                className={`absolute mt-2 inline-block h-4 w-4  transform rotate-45 ${bgColorClass} ${
+                  isSelf ? "left-2" : "right-2"
                 }`}
               ></div>
-              <p>{message.content}</p>
+              <p
+                className={`${bgColorClass} px-4 py-4 rounded-lg inline-block mt-4 text-white`}
+              >
+                {message.content}
+              </p>
             </div>
           </div>
         );

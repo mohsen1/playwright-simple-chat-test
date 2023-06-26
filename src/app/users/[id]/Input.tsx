@@ -36,6 +36,7 @@ export function Input({ id }: { id: string }) {
           if (content) {
             form.content.value = "";
             form.content.focus();
+            updatingStatus(false);
             fetch(form.action, {
               method: form.method,
               body: formData,
