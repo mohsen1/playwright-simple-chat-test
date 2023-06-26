@@ -87,7 +87,7 @@ export function Messages({ id }: { id: string }) {
 const TypingIndicator = () => {
   return (
     <div
-      data-test-id="typing-indicator"
+      data-testid="typing-indicator"
       className="flex items-center space-x-2 py-4 px-6 animate-pulse justify-end align-end"
     >
       <div className="w-2.5 h-2.5 bg-blue-500 rounded-full"></div>

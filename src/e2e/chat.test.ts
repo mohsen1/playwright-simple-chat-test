@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { test } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 
 function resetDatabase() {
   fs.writeFileSync("db.json", JSON.stringify({ messages: [] }));
@@ -44,7 +44,10 @@ test.describe("Chat", () => {
         .getByPlaceholder("Type a message")
         .type("Hello from user 2", { delay: 100 }),
 
-      typingIndicator.isVisible(),
+      (async () => {
+        await typingIndicator.waitFor({ state: "visible" });
+        expect(await typingIndicator.isVisible()).toBe(true);
+      })(),
     ]);
   });
 });
