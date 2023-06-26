@@ -1,5 +1,6 @@
 "use client";
-import { Message, SSE } from "@/app/api/chat/route";
+
+import { Message, SSE } from "@/app/types";
 import { useEffect, useRef, useState } from "react";
 
 export function Messages({ id }: { id: string }) {
@@ -53,7 +54,9 @@ export function Messages({ id }: { id: string }) {
               <div className="opacity-30 ">
                 {new Date(message.timestamp).toLocaleTimeString()}
               </div>
-              <div className="px-2">User {message.senderId}</div>
+              <div className="px-2">
+                {isSelf ? "You" : `User ${message.senderId}`}
+              </div>
             </div>
 
             <div

@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export function Input({ id }: { id: string }) {
-  const [typing, setTyping] = useState(false);
+  const [, setTyping] = useState(false);
   const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(
     null
   );
@@ -43,7 +43,6 @@ export function Input({ id }: { id: string }) {
           }
         }}
       >
-        <div>{typing && <span>Typing</span>}</div>
         <input type="hidden" name="senderId" value={id} />
         <input
           name="content"

@@ -1,58 +1,17 @@
+import { MessageEvent, UserEvent } from "@/app/types";
 import { NextRequest } from "next/server";
 import { EventEmitter } from "stream";
-
-export interface Message {
-  timestamp: number;
-  senderId: string;
-  content: string;
-}
-
-export interface User {
-  id: string;
-  typing: boolean;
-}
-
-interface DB {
-  messages: Message[];
-  users: User[];
-}
-
-const db: DB = {
-  messages: [],
-  users: [
-    {
-      id: "1",
-      typing: false,
-    },
-    {
-      id: "2",
-      typing: false,
-    },
-  ],
-};
-
-export interface MessageEvent {
-  event: "message";
-  data: Message[];
-}
-
-export interface UserEvent {
-  event: "user";
-  data: User;
-}
-
-export type SSE = MessageEvent | UserEvent;
+import { DB } from "./db";
 
 export async function PUT(request: NextRequest) {
   const formData = await request.formData();
   const userId = formData.get("userId") as string;
   const typing = formData.get("typing") === "true";
 
-  const user = db.users.find((user) => user.id === userId);
-  if (user) {
-    user.typing = typing;
-    eventEmitter.emit("user", user);
-  }
+  eventEmitter.emit("user", {
+    id: userId,
+    typing: typing,
+  });
 
   return new Response("OK");
 }
@@ -60,7 +19,7 @@ export async function PUT(request: NextRequest) {
 const eventEmitter = new EventEmitter();
 
 export async function POST(request: NextRequest) {
-  // get the form data
+  const db = new DB();
   const formData = await request.formData();
 
   const message = {
@@ -68,7 +27,7 @@ export async function POST(request: NextRequest) {
     senderId: formData.get("senderId") as string,
     content: formData.get("content") as string,
   };
-  db.messages.push(message);
+  db.appendMessage(message);
 
   eventEmitter.emit("messages", [message]);
 
@@ -76,7 +35,8 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
-  let responseStream = new TransformStream();
+  const db = new DB();
+  const responseStream = new TransformStream();
   const writer = responseStream.writable.getWriter();
   const encoder = new TextEncoder();
 
@@ -96,7 +56,11 @@ export async function GET(request: NextRequest) {
     writer.write(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
   });
 
-  writer.write(encoder.encode("data: " + JSON.stringify(db.messages) + "\n\n"));
+  const data: MessageEvent = {
+    event: "message",
+    data: db.messages,
+  };
+  writer.write(encoder.encode("data: " + JSON.stringify(data) + "\n\n"));
 
   return new Response(responseStream.readable, {
     headers: {
