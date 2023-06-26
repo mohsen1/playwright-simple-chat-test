@@ -28,4 +28,25 @@ test.describe("Chat", () => {
     await secondTab.getByPlaceholder("Type a message").press("Enter");
     await page.waitForSelector("text=Hello from user 2");
   });
+
+  test("typing indicator", async ({ browser, page }) => {
+    const secondWindow = await browser.newContext();
+    const secondPage = await secondWindow.newPage();
+    await secondPage.goto("/users/2");
+    await secondPage.getByPlaceholder("Type a message").isVisible();
+    await page.goto("/users/1");
+    await page.getByPlaceholder("Type a message").isVisible();
+
+    await Promise.all([
+      async () => {
+        await secondPage
+          .getByPlaceholder("Type a message")
+          .type("Hello from user 2", { delay: 100 });
+      },
+      async () => {
+        const typingIndicator = page.getByTestId("typing-indicator");
+        await typingIndicator.isVisible();
+      },
+    ]);
+  });
 });
