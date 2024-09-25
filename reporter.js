@@ -48,13 +48,12 @@ class PlaywrightBuildkiteAnalyticsReporter {
     this._history[0].detail.duration =
       this._history[0].end_at - this._history[0].start_at;
 
+    console.log("Uploading test results to Buildkite Test Analytics");
     return new Promise((resolve) => {
-      uploadTestResults(
-        this._testEnv,
-        this._testResults,
-        this._options,
-        resolve
-      );
+      uploadTestResults(this._testEnv, this._testResults, this._options, () => {
+        console.log("Test results uploaded to Buildkite Test Analytics");
+        resolve();
+      });
     });
   }
 
@@ -92,8 +91,6 @@ class PlaywrightBuildkiteAnalyticsReporter {
         }
       }
     });
-
-    console.log(JSON.stringify(this._history));
 
     this._testResults.push({
       id: test.id,

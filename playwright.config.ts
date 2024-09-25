@@ -4,8 +4,8 @@ export default defineConfig({
   testDir: "src/e2e",
   testMatch: "**/*.test.ts",
   reporter: [
-    process.env.BUILDKITE ? ["line"] : ["html", { open: "never" }],
     ["./reporter.js"],
+    process.env.BUILDKITE ? ["line"] : ["html", { open: "never" }],
   ],
   webServer: {
     command: "yarn run start",
