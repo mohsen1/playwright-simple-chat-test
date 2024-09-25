@@ -91,6 +91,8 @@ class PlaywrightBuildkiteAnalyticsReporter {
       }
     });
 
+    console.log(this._history);
+
     this._testResults.push({
       id: test.id,
       name: test.title,
@@ -100,6 +102,7 @@ class PlaywrightBuildkiteAnalyticsReporter {
       result: this.analyticsResult(testResult.status),
       failure_reason: this.analyticsFailureReason(testResult),
       failure_expanded: this.analyticsFailureExpanded(testResult),
+      history: this._history,
     });
   }
 
