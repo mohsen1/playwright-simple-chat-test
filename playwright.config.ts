@@ -4,9 +4,7 @@ export default defineConfig({
   testDir: "src/e2e",
   testMatch: "**/*.test.ts",
   reporter: [
-    process.env.BUILDKITE_TEST_ANALYTICS_TOKEN
-      ? ["line"]
-      : ["html", { open: "never" }],
+    process.env.BUILDKITE ? ["line"] : ["html", { open: "never" }],
     ["./reporter.js"],
   ],
   webServer: {

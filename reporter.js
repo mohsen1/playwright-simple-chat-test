@@ -91,7 +91,7 @@ class PlaywrightBuildkiteAnalyticsReporter {
       }
     });
 
-    console.log(this._history);
+    console.log(JSON.stringify(this._history));
 
     this._testResults.push({
       id: test.id,
