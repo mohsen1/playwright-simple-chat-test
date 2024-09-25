@@ -2,5 +2,5 @@ steps:
   - command: yarn install && yarn build && yarn e2e
     plugins:
       - docker#v3.2.0:
-          image: mcr.microsoft.com/playwright:v1.31.1-noble
+          image: mcr.microsoft.com/playwright:v1.47.2-jammy
           workdir: /app
