@@ -7,8 +7,7 @@ export default defineConfig({
     process.env.BUILDKITE_TEST_ANALYTICS_TOKEN
       ? ["line"]
       : ["html", { open: "never" }],
-    // ["./reporter.js"],
-    ["./SpanReporter.ts"],
+    ["./reporter.js"],
   ],
   webServer: {
     command: "yarn run start",
