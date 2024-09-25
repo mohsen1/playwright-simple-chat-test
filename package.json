@@ -25,6 +25,7 @@
     "typescript": "5.1.3"
   },
   "devDependencies": {
-    "@playwright/test": "^1.47.2"
+    "@playwright/test": "^1.47.2",
+    "buildkite-test-collector": "^1.7.2"
   }
 }
