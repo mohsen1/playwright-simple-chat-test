@@ -5,10 +5,18 @@ steps:
         echo "BUILDKITE_ANALYTICS_TOKEN is not set"
         exit 1
       fi
-  - command: yarn install && yarn build && yarn e2e
+  - label: "Run tests"
+    command: yarn install && yarn build && yarn e2e
     plugins:
       - docker#v3.2.0:
           image: mcr.microsoft.com/playwright:v1.47.2-jammy
           workdir: /app
-          env:
-            - "BUILDKITE_ANALYTICS_TOKEN=$BUILDKITE_ANALYTICS_TOKEN"
+          environment:
+            - BUILDKITE_ANALYTICS_TOKEN
+            - BUILDKITE_BUILD_ID
+            - BUILDKITE_BUILD_NUMBER
+            - BUILDKITE_JOB_ID
+            - BUILDKITE_BRANCH
+            - BUILDKITE_COMMIT
+            - BUILDKITE_MESSAGE
+            - BUILDKITE_BUILD_URL
