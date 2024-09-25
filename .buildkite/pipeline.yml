@@ -1,0 +1,26 @@
+steps:
+  - label: "Install Node.js and Yarn"
+    command: |
+      # Install Node.js using nvm (Node Version Manager)
+      curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+      export NVM_DIR="$HOME/.nvm"
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+      nvm install 20
+
+      # Install Yarn
+      npm install -g yarn
+
+  - label: "Install dependencies"
+    command: yarn install
+
+  - label: "Install Playwright browsers"
+    command: yarn playwright install
+
+  - label: "Build"
+    command: yarn build
+    key: build
+
+  - label: "End-to-end test"
+    command: yarn e2e
+    key: e2e
+    depends_on: build
