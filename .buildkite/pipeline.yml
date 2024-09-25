@@ -3,16 +3,16 @@ steps:
     command: node -v
     key: node-version
 
-  - label: "Print Yarn version"
-    command: yarn -v
-    key: yarn-version
+  - label: "Install Yarn"
+    command: npm install -g yarn
+    key: yarn
 
   - label: "Install dependencies"
     command: yarn install
     key: install
     depends_on:
       - node-version
-      - yarn-version
+      - yarn
 
   - label: "Install Playwright browsers"
     command: yarn playwright install
