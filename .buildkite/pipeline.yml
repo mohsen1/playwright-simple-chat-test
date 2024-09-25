@@ -1,5 +1,5 @@
 steps:
-  - command: yarn install && yarn playwright install && yarn build && yarn e2e
+  - command: yarn install && yarn playwright install --with-deps && yarn build && yarn e2e
     plugins:
       - docker#v3.2.0:
           image: "node:latest"
