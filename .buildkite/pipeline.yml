@@ -1,58 +1,6 @@
 steps:
-  - label: "Print Node.js version"
-    command: node -v
-    key: node-version
+  - command: yarn install && yarn playwright install && yarn build && yarn e2e
     plugins:
-      - docker#v5.5.1:
+      - docker#v3.2.0:
           image: "node:latest"
-          volumes:
-            - "build-volume:/app"
           workdir: /app
-
-  - label: "Install dependencies"
-    command: yarn install
-    key: install-dependencies
-    plugins:
-      - docker#v5.5.1:
-          image: "node:latest"
-          volumes:
-            - "build-volume:/app"
-          workdir: /app
-    depends_on:
-      - node-version
-
-  - label: "Install Playwright"
-    command: yarn playwright install
-    key: install-playwright
-    plugins:
-      - docker#v5.5.1:
-          image: "node:latest"
-          volumes:
-            - "build-volume:/app"
-          workdir: /app
-    depends_on:
-      - install-dependencies
-
-  - label: "Build project"
-    command: yarn build
-    key: build
-    plugins:
-      - docker#v5.5.1:
-          image: "node:latest"
-          volumes:
-            - "build-volume:/app"
-          workdir: /app
-    depends_on:
-      - install-playwright
-
-  - label: "Run E2E tests"
-    command: yarn e2e
-    key: e2e-tests
-    plugins:
-      - docker#v5.5.1:
-          image: "node:latest"
-          volumes:
-            - "build-volume:/app"
-          workdir: /app
-    depends_on:
-      - build
