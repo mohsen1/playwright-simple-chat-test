@@ -65,9 +65,6 @@ class PlaywrightBuildkiteAnalyticsReporter {
       ":"
     );
 
-    const history = this._tracer.history();
-    console.log("history", JSON.stringify(history, null, 2));
-
     this._testResults.push({
       id: test.id,
       name: test.title,
@@ -77,7 +74,6 @@ class PlaywrightBuildkiteAnalyticsReporter {
       result: this.analyticsResult(testResult.status),
       failure_reason: this.analyticsFailureReason(testResult),
       failure_expanded: this.analyticsFailureExpanded(testResult),
-      history,
     });
   }
 
