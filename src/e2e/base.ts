@@ -16,6 +16,8 @@ const test = baseTest.extend<ExtendedFixtures>({
   // Add networkRequests to test metadata after the test is complete
   requestInterceptor: [
     async ({ page }, use, testInfo) => {
+      // we do this in case there are any inflight requests that could skew the results
+      await page.unrouteAll({ behavior: "ignoreErrors" });
       const networkRequests: NetworkRequest[] = [];
       await page.route("**/*", async (route) => {
         const startTime = Date.now();
