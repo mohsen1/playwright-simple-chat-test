@@ -1,21 +1,4 @@
 steps:
-  - label: "Print Node.js version"
-    command: node -v
-    key: node-version
-    plugins:
-      - docker#v5.5.1:
-          image: "node:latest"
-          volumes:
-            - "./:/app"
-          workdir: /app
-
-  - label: "Print Yarn version"
-    command: yarn -v
-    key: yarn-version
-    plugins:
-      - docker#v5.5.1:
-          image: "node:latest"
-
   - label: "Install dependencies"
     command: yarn install
     key: install-dependencies
@@ -25,9 +8,6 @@ steps:
           volumes:
             - "./:/app"
           workdir: /app
-    depends_on:
-      - node-version
-      - yarn-version
 
   - label: "Install Playwright"
     command: yarn playwright install
