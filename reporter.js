@@ -76,17 +76,19 @@ class PlaywrightBuildkiteAnalyticsReporter {
         const body = attachment.body?.toString("utf-8");
         if (body) {
           const payload = JSON.parse(body);
-          this._history[0].children.push({
-            session: "http",
-            start_at: payload.startTime - this._startTime,
-            end_at: payload.endTime - this._startTime,
-            duration: payload.endTime - payload.startTime,
-            detail: {
-              method: payload.method?.toUpperCase() || "GET",
-              url: payload.url,
-              status: payload.status,
-            },
-          });
+          for (const request of payload) {
+            this._history[0].children.push({
+              session: "http",
+              start_at: request.startTime - this._startTime,
+              end_at: request.endTime - this._startTime,
+              duration: request.endTime - request.startTime,
+              detail: {
+                method: request.method || "GET",
+                url: request.url,
+                status: request.status,
+              },
+            });
+          }
         }
       }
     });
