@@ -1,0 +1,16 @@
+steps:
+  - label: "Run tests"
+    command: yarn install && yarn build && yarn e2e
+    plugins:
+      - docker#v3.2.0:
+          image: mcr.microsoft.com/playwright:v1.47.2-jammy
+          workdir: /app
+          environment:
+            - BUILDKITE_ANALYTICS_TOKEN=1CbQhE3Pjr4SMcUiHmTsc6BP
+            - BUILDKITE_BUILD_ID
+            - BUILDKITE_BUILD_NUMBER
+            - BUILDKITE_JOB_ID
+            - BUILDKITE_BRANCH
+            - BUILDKITE_COMMIT
+            - BUILDKITE_MESSAGE
+            - BUILDKITE_BUILD_URL
