@@ -14,3 +14,4 @@ steps:
             - BUILDKITE_COMMIT
             - BUILDKITE_MESSAGE
             - BUILDKITE_BUILD_URL
+            - BUILDKITE

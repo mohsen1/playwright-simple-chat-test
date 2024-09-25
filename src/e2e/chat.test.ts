@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./base";
 
 function resetDatabase() {
   fs.writeFileSync("db.json", JSON.stringify({ messages: [] }));

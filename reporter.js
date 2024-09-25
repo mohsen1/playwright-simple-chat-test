@@ -3,9 +3,6 @@ const CI = require("buildkite-test-collector/util/ci");
 const uploadTestResults = require("buildkite-test-collector/util/uploadTestResults");
 const Paths = require("buildkite-test-collector/util/paths");
 
-const Network = require("buildkite-test-collector/util/network");
-const Tracer = require("buildkite-test-collector/util/tracer");
-
 /**
  * JSDoc Imports
  *
@@ -31,16 +28,26 @@ class PlaywrightBuildkiteAnalyticsReporter {
       { cwd: process.cwd() },
       this._testEnv.location_prefix
     );
-    this._network = new Network();
-    this._tracer = new Tracer();
-    this._network.setup(this._tracer);
+    this._startTime = Date.now();
   }
 
-  onBegin() {}
+  onBegin() {
+    this._history = [
+      {
+        session: "top",
+        children: [],
+        detail: {},
+        start_at: Date.now() - this._startTime,
+      },
+    ];
+  }
 
   onEnd() {
-    this._tracer.finalize();
-    this._network.teardown();
+    // todo: clean up
+    this._history[0].end_at = Date.now() - this._startTime;
+    this._history[0].detail.duration =
+      this._history[0].end_at - this._history[0].start_at;
+
     return new Promise((resolve) => {
       uploadTestResults(
         this._testEnv,
@@ -64,6 +71,29 @@ class PlaywrightBuildkiteAnalyticsReporter {
     const location = [fileName, test.location.line, test.location.column].join(
       ":"
     );
+    testResult.attachments.forEach((attachment) => {
+      if (attachment.name === "network-requests") {
+        const body = attachment.body?.toString("utf-8");
+        if (body) {
+          const payload = JSON.parse(body);
+          for (const request of payload) {
+            this._history[0].children.push({
+              session: "http",
+              start_at: request.startTime - this._startTime,
+              end_at: request.endTime - this._startTime,
+              duration: request.endTime - request.startTime,
+              detail: {
+                method: request.method || "GET",
+                url: request.url,
+                status: request.status,
+              },
+            });
+          }
+        }
+      }
+    });
+
+    console.log(JSON.stringify(this._history));
 
     this._testResults.push({
       id: test.id,
@@ -74,6 +104,7 @@ class PlaywrightBuildkiteAnalyticsReporter {
       result: this.analyticsResult(testResult.status),
       failure_reason: this.analyticsFailureReason(testResult),
       failure_expanded: this.analyticsFailureExpanded(testResult),
+      history: this._history,
     });
   }
 
