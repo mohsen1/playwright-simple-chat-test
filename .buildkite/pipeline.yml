@@ -5,6 +5,9 @@ steps:
     plugins:
       - docker#v5.5.1:
           image: "node:latest"
+          volumes:
+            - "./:/app"
+          workdir: /app
 
   - label: "Print Yarn version"
     command: yarn -v
@@ -19,6 +22,9 @@ steps:
     plugins:
       - docker#v5.5.1:
           image: "node:latest"
+          volumes:
+            - "./:/app"
+          workdir: /app
     depends_on:
       - node-version
       - yarn-version
@@ -29,6 +35,9 @@ steps:
     plugins:
       - docker#v5.5.1:
           image: "node:latest"
+          volumes:
+            - "./:/app"
+          workdir: /app
     depends_on:
       - install-dependencies
 
@@ -38,6 +47,9 @@ steps:
     plugins:
       - docker#v5.5.1:
           image: "node:latest"
+          volumes:
+            - "./:/app"
+          workdir: /app
     depends_on:
       - install-playwright
 
@@ -47,5 +59,8 @@ steps:
     plugins:
       - docker#v5.5.1:
           image: "node:latest"
+          volumes:
+            - "./:/app"
+          workdir: /app
     depends_on:
       - build
