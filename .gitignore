@@ -38,3 +38,4 @@ db.json
 
 # Playwright
 test-results
+playwright-report

@@ -3,10 +3,16 @@ import { NextRequest } from "next/server";
 import { EventEmitter } from "stream";
 import { DB } from "./db";
 
+function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export async function PUT(request: NextRequest) {
   const formData = await request.formData();
   const userId = formData.get("userId") as string;
   const typing = formData.get("typing") === "true";
+
+  await wait(Math.random() * 500);
 
   eventEmitter.emit("user", {
     id: userId,
@@ -21,6 +27,8 @@ const eventEmitter = new EventEmitter();
 export async function POST(request: NextRequest) {
   const db = new DB();
   const formData = await request.formData();
+
+  await wait(Math.random() * 500);
 
   const message = {
     timestamp: Date.now(),
@@ -39,6 +47,8 @@ export async function GET(request: NextRequest) {
   const responseStream = new TransformStream();
   const writer = responseStream.writable.getWriter();
   const encoder = new TextEncoder();
+
+  await wait(Math.random() * 500);
 
   eventEmitter.on("messages", (message) => {
     const data: MessageEvent = {
