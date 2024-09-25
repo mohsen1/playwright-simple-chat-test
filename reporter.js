@@ -75,15 +75,16 @@ class PlaywrightBuildkiteAnalyticsReporter {
       if (attachment.name === "network-requests") {
         const body = attachment.body?.toString("utf-8");
         if (body) {
+          const payload = JSON.parse(body);
           this._history[0].children.push({
             session: "http",
-            start_at: body.startTime - this._startTime,
-            end_at: body.endTime - this._startTime,
-            duration: body.endTime - body.startTime,
+            start_at: payload.startTime - this._startTime,
+            end_at: payload.endTime - this._startTime,
+            duration: payload.endTime - payload.startTime,
             detail: {
-              method: body.method.toUpperCase(),
-              url: body.url,
-              status: body.status,
+              method: payload.method?.toUpperCase() || "GET",
+              url: payload.url,
+              status: payload.status,
             },
           });
         }
