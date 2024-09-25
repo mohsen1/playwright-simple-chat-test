@@ -2,32 +2,50 @@ steps:
   - label: "Print Node.js version"
     command: node -v
     key: node-version
+    plugins:
+      - docker#v5.5.1:
+          image: "node:latest"
 
-  - label: "Install Yarn"
-    command: npm install -g yarn
-    key: yarn
+  - label: "Print Yarn version"
+    command: yarn -v
+    key: yarn-version
+    plugins:
+      - docker#v5.5.1:
+          image: "node:latest"
 
   - label: "Install dependencies"
     command: yarn install
-    key: install
+    key: install-dependencies
+    plugins:
+      - docker#v5.5.1:
+          image: "node:latest"
     depends_on:
       - node-version
-      - yarn
+      - yarn-version
 
-  - label: "Install Playwright browsers"
+  - label: "Install Playwright"
     command: yarn playwright install
-    key: playwright-install
+    key: install-playwright
+    plugins:
+      - docker#v5.5.1:
+          image: "node:latest"
     depends_on:
-      - install
+      - install-dependencies
 
-  - label: "Build"
+  - label: "Build project"
     command: yarn build
     key: build
+    plugins:
+      - docker#v5.5.1:
+          image: "node:latest"
     depends_on:
-      - playwright-install
+      - install-playwright
 
-  - label: "End-to-end test"
+  - label: "Run E2E tests"
     command: yarn e2e
-    key: e2e
+    key: e2e-tests
+    plugins:
+      - docker#v5.5.1:
+          image: "node:latest"
     depends_on:
       - build
