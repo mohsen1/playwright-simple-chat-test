@@ -49,8 +49,7 @@ class PlaywrightBuildkiteAnalyticsReporter {
     this._historyTop.children.unshift(this._history);
 
     console.log("Uploading test results to Buildkite Test Analytics");
-    console.log("test gresults", JSON.stringify(this._testResults, null, 2));
-    return await new Promise(async (resolve, reject) => {
+    await new Promise(async (resolve, reject) => {
       try {
         await uploadTestResults(
           this._testEnv,
@@ -70,6 +69,7 @@ class PlaywrightBuildkiteAnalyticsReporter {
         reject(error);
       }
     });
+    console.log("Completed the promise");
   }
 
   onTestBegin() {}
