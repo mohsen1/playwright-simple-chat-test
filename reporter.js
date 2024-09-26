@@ -49,6 +49,7 @@ class PlaywrightBuildkiteAnalyticsReporter {
     this._history.duration = this._history.end_at - this._history.start_at;
 
     console.log("Uploading test results to Buildkite Test Analytics");
+    console.log("test results", JSON.stringify(this._testResults, null, 2));
     return await new Promise(async (resolve, reject) => {
       try {
         await uploadTestResults(
