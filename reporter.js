@@ -56,10 +56,17 @@ class PlaywrightBuildkiteAnalyticsReporter {
           this._testResults,
           this._options,
           () => {
-            console.log("Test results uploaded to Buildkite Test Analytics");
+            console.log(
+              "Done uploading test results to Buildkite Test Analytics"
+            );
             resolve();
           }
-        );
+        ).catch((error) => {
+          console.error(
+            "Error uploading test results to Buildkite Test Analytics"
+          );
+          reject(error);
+        });
       } catch (error) {
         console.error(
           "Error uploading test results to Buildkite Test Analytics"
