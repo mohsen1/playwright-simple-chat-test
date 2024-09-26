@@ -45,10 +45,8 @@ class PlaywrightBuildkiteAnalyticsReporter {
   }
 
   onEnd() {
-    // todo: clean up
     this._history.end_at = Date.now() - this._startTime;
-    this._history.detail.duration =
-      this._history.end_at - this._history.start_at;
+    this._history.duration = this._history.end_at - this._history.start_at;
 
     console.log("Uploading test results to Buildkite Test Analytics");
     return new Promise((resolve, reject) => {
@@ -90,7 +88,7 @@ class PlaywrightBuildkiteAnalyticsReporter {
         if (body) {
           const payload = JSON.parse(body);
           for (const request of payload) {
-            this._history[0].children.push({
+            this._history.children.push({
               session: "http",
               start_at: request.startTime - this._startTime,
               end_at: request.endTime - this._startTime,
