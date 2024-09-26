@@ -32,24 +32,24 @@ class PlaywrightBuildkiteAnalyticsReporter {
   }
 
   onBegin() {
+    this._historyTop = {
+      children: [],
+      detail: {},
+      start_at: Date.now() - this._startTime,
+    };
     this._history = {
-      children: [
-        {
-          session: "top",
-          children: [],
-          detail: {},
-          start_at: Date.now() - this._startTime,
-        },
-      ],
+      children: [],
     };
   }
 
   async onEnd() {
-    this._history.end_at = Date.now() - this._startTime;
-    this._history.duration = this._history.end_at - this._history.start_at;
+    this._historyTop.end_at = Date.now() - this._startTime;
+    this._historyTop.duration =
+      this._historyTop.end_at - this._historyTop.start_at;
+    this._historyTop.children.unshift(this._history);
 
     console.log("Uploading test results to Buildkite Test Analytics");
-    console.log("test results", JSON.stringify(this._testResults, null, 2));
+    console.log("test gresults", JSON.stringify(this._testResults, null, 2));
     return await new Promise(async (resolve, reject) => {
       try {
         await uploadTestResults(
