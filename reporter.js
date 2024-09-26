@@ -44,14 +44,14 @@ class PlaywrightBuildkiteAnalyticsReporter {
     };
   }
 
-  onEnd() {
+  async onEnd() {
     this._history.end_at = Date.now() - this._startTime;
     this._history.duration = this._history.end_at - this._history.start_at;
 
     console.log("Uploading test results to Buildkite Test Analytics");
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       try {
-        uploadTestResults(
+        await uploadTestResults(
           this._testEnv,
           this._testResults,
           this._options,
@@ -61,12 +61,7 @@ class PlaywrightBuildkiteAnalyticsReporter {
             );
             resolve();
           }
-        ).catch((error) => {
-          console.error(
-            "Error uploading test results to Buildkite Test Analytics"
-          );
-          reject(error);
-        });
+        );
       } catch (error) {
         console.error(
           "Error uploading test results to Buildkite Test Analytics"
