@@ -32,28 +32,42 @@ class PlaywrightBuildkiteAnalyticsReporter {
   }
 
   onBegin() {
-    this._history = [
-      {
-        session: "top",
-        children: [],
-        detail: {},
-        start_at: Date.now() - this._startTime,
-      },
-    ];
+    this._history = {
+      children: [
+        {
+          session: "top",
+          children: [],
+          detail: {},
+          start_at: Date.now() - this._startTime,
+        },
+      ],
+    };
   }
 
   onEnd() {
     // todo: clean up
-    this._history[0].end_at = Date.now() - this._startTime;
-    this._history[0].detail.duration =
-      this._history[0].end_at - this._history[0].start_at;
+    this._history.end_at = Date.now() - this._startTime;
+    this._history.detail.duration =
+      this._history.end_at - this._history.start_at;
 
     console.log("Uploading test results to Buildkite Test Analytics");
-    return new Promise((resolve) => {
-      uploadTestResults(this._testEnv, this._testResults, this._options, () => {
-        console.log("Test results uploaded to Buildkite Test Analytics");
-        resolve();
-      });
+    return new Promise((resolve, reject) => {
+      try {
+        uploadTestResults(
+          this._testEnv,
+          this._testResults,
+          this._options,
+          () => {
+            console.log("Test results uploaded to Buildkite Test Analytics");
+            resolve();
+          }
+        );
+      } catch (error) {
+        console.error(
+          "Error uploading test results to Buildkite Test Analytics"
+        );
+        reject(error);
+      }
     });
   }
 
