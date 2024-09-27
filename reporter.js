@@ -100,7 +100,8 @@ class PlaywrightBuildkiteAnalyticsReporter {
               duration: request.endTime - request.startTime,
               detail: {
                 method: request.method || "GET",
-                url: request.url
+                url: request.url,
+                lib: 'hello'
               },
             });
           }
@@ -121,7 +122,7 @@ class PlaywrightBuildkiteAnalyticsReporter {
         'section': 'top',
         'start_at': testResult.startTime.getTime(),
         'duration': testResult.duration / 1000,
-        //'children': children
+        'children': children
       }
     });
   }
