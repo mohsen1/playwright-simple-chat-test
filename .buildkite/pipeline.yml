@@ -7,6 +7,7 @@ steps:
           workdir: /app
           environment:
             - BUILDKITE_ANALYTICS_TOKEN=xDyYoHc8qh5JKrvvecWKBrJX
+            - BUILDKITE_ANALYTICS_DEBUG_ENABLED=true
             - BUILDKITE_BUILD_ID
             - BUILDKITE_BUILD_NUMBER
             - BUILDKITE_JOB_ID
