@@ -85,21 +85,15 @@ class PlaywrightBuildkiteAnalyticsReporter {
     const location = [fileName, test.location.line, test.location.column].join(
       ":"
     );
-
-    this._history = {
-      'section': 'top',
-      'start_at': testResult.startTime.getTime(),
-      'duration': testResult.duration / 1000,
-      'children': []
-    };
-    
+    const children = [];
+      
     testResult.attachments.forEach((attachment) => {
       if (attachment.name === "network-requests") {
         const body = attachment.body?.toString("utf-8");
         if (body) {
           const payload = JSON.parse(body);
           for (const request of payload) {
-            this._history.children.push({
+            children.push({
               session: "http",
               start_at: request.startTime - this._startTime,
               end_at: request.endTime - this._startTime,
@@ -123,7 +117,12 @@ class PlaywrightBuildkiteAnalyticsReporter {
       result: this.analyticsResult(testResult.status),
       failure_reason: this.analyticsFailureReason(testResult),
       failure_expanded: this.analyticsFailureExpanded(testResult),
-      history: this._history,
+      history: 'history': {
+        'section': 'top',
+        'start_at': testResult.startTime.getTime(),
+        'duration': testResult.duration / 1000,
+        'children': children
+      }
     });
   }
 
