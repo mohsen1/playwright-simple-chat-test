@@ -85,6 +85,14 @@ class PlaywrightBuildkiteAnalyticsReporter {
     const location = [fileName, test.location.line, test.location.column].join(
       ":"
     );
+
+    this._history = {
+      'section': 'top',
+      'start_at': testResult.startTime.getTime(),
+      'duration': testResult.duration / 1000,
+      'children': []
+    };
+    
     testResult.attachments.forEach((attachment) => {
       if (attachment.name === "network-requests") {
         const body = attachment.body?.toString("utf-8");
