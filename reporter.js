@@ -117,7 +117,7 @@ class PlaywrightBuildkiteAnalyticsReporter {
       result: this.analyticsResult(testResult.status),
       failure_reason: this.analyticsFailureReason(testResult),
       failure_expanded: this.analyticsFailureExpanded(testResult),
-      history: 'history': {
+      history: {
         'section': 'top',
         'start_at': testResult.startTime.getTime(),
         'duration': testResult.duration / 1000,
