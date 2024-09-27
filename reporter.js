@@ -121,7 +121,7 @@ class PlaywrightBuildkiteAnalyticsReporter {
         'section': 'top',
         'start_at': testResult.startTime.getTime(),
         'duration': testResult.duration / 1000,
-        'children': children
+        //'children': children
       }
     });
   }
