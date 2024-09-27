@@ -97,7 +97,7 @@ class PlaywrightBuildkiteAnalyticsReporter {
               session: "http",
               start_at: request.startTime - this._startTime,
               end_at: request.endTime - this._startTime,
-              duration: request.endTime - request.startTime,
+              duration: (request.endTime - request.startTime) / 1.0,
               detail: {
                 method: request.method || "GET",
                 url: request.url,
