@@ -106,8 +106,7 @@ class PlaywrightBuildkiteAnalyticsReporter {
               duration: request.endTime - request.startTime,
               detail: {
                 method: request.method || "GET",
-                url: request.url,
-                status: request.status,
+                url: request.url
               },
             });
           }
