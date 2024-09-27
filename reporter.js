@@ -97,11 +97,11 @@ class PlaywrightBuildkiteAnalyticsReporter {
               section: "http",
               start_at: request.startTime - this._startTime,
               end_at: request.endTime - this._startTime,
-              duration: (request.endTime - request.startTime) / 1.0,
+              duration: request.endTime - request.startTime,
               detail: {
                 method: request.method || "GET",
                 url: request.url,
-                lib: 'hello'
+                lib: 'playwright'
               },
             });
           }
