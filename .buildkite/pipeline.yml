@@ -6,7 +6,8 @@ steps:
           image: mcr.microsoft.com/playwright:v1.47.2-jammy
           workdir: /app
           environment:
-            - BUILDKITE_ANALYTICS_TOKEN=xDyYoHc8qh5JKrvvecWKBrJX
+            - BUILDKITE_ANALYTICS_TOKEN=U6jSuShCPRRYZuteWFhCuv1a
+            - BUILDKITE_ANALYTICS_DEBUG_ENABLED=true
             - BUILDKITE_BUILD_ID
             - BUILDKITE_BUILD_NUMBER
             - BUILDKITE_JOB_ID

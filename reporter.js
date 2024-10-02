@@ -85,21 +85,23 @@ class PlaywrightBuildkiteAnalyticsReporter {
     const location = [fileName, test.location.line, test.location.column].join(
       ":"
     );
+    const children = [];
+      
     testResult.attachments.forEach((attachment) => {
       if (attachment.name === "network-requests") {
         const body = attachment.body?.toString("utf-8");
         if (body) {
           const payload = JSON.parse(body);
           for (const request of payload) {
-            this._history.children.push({
-              session: "http",
+            children.push({
+              section: "http",
               start_at: request.startTime - this._startTime,
               end_at: request.endTime - this._startTime,
               duration: request.endTime - request.startTime,
               detail: {
                 method: request.method || "GET",
                 url: request.url,
-                status: request.status,
+                lib: 'playwright'
               },
             });
           }
@@ -116,7 +118,12 @@ class PlaywrightBuildkiteAnalyticsReporter {
       result: this.analyticsResult(testResult.status),
       failure_reason: this.analyticsFailureReason(testResult),
       failure_expanded: this.analyticsFailureExpanded(testResult),
-      history: this._history,
+      history: {
+        'section': 'top',
+        'start_at': testResult.startTime.getTime(),
+        'duration': testResult.duration / 1000,
+        'children': children
+      }
     });
   }
 
